@@ -4,11 +4,10 @@ export interface IProduct {
   amount: string,
   orderId?: number,
 }
-// export interface IProductID {
-//   id?: number,
-//   orderId?: number,
-// }
-  
-// export interface IInsertId {
-//   insertId: string,
-// }
+export interface IUser {
+  id: number;
+  username: string;
+  classe: string;
+  level: number;
+  password: string;
+}
