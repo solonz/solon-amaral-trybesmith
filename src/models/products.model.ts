@@ -1,25 +1,30 @@
-import { RowDataPacket } from 'mysql2';
-import { IInsertId, IProduct } from '../interfaces';
-import connection from './connection';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { IProduct } from '../interfaces';
+import mysql from './connection';
 
-async function getById(id: number) {
-  const [[result]] = await connection.execute<IProduct & RowDataPacket[]>(
-    'SELECT id, name, amount FROM Trybesmith.Products WHERE id = (?)',
-    [id],
-  );
-  return result;
-}
-
-async function insert(product: IProduct) {
-  const [{ insertId }] = await connection.execute<IInsertId & RowDataPacket[]>(
-    'INSERT INTO Trybesmith.Products (name, amount) VALUE (?, ?)',
-    [product.name, product.amount],
-  );
+export default class ProductsModel {
+  private connection = mysql;
   
-  return insertId;
+  public async insert(product: IProduct): Promise<IProduct> {
+    const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
+      'INSERT INTO Trybesmith.Products (name, amount) VALUE (?, ?)',
+      [product.name, product.amount],
+    );
+    
+    return { id: insertId, ...product };
+  }
+  
+  public async getAll(): Promise<IProduct[]> {
+    const [allProducts] = await this.connection.execute<IProduct[] & RowDataPacket[]>(
+      'SELECT id, name, amount FROM Trybesmith.Products',
+    );
+    return allProducts;
+  }
 }
-
-export default {
-  getById,
-  insert,
-};
+// async getById(id: number) {
+//   const [[result]] = await this.connection.execute<IProduct & RowDataPacket[]>(
+//     'SELECT id, name, amount FROM Trybesmith.Products WHERE id = (?)',
+//     [id],
+//   );
+//   return result;
+// }

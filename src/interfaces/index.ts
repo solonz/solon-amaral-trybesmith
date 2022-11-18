@@ -4,7 +4,11 @@ export interface IProduct {
   amount: string,
   orderId?: number,
 }
+// export interface IProductID {
+//   id?: number,
+//   orderId?: number,
+// }
   
-export interface IInsertId {
-  insertId: string,
-}
+// export interface IInsertId {
+//   insertId: string,
+// }

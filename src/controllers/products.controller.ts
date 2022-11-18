@@ -1,17 +1,21 @@
 import { Request, Response } from 'express';
-import { IProduct } from '../interfaces';
-import productsService from '../services/products.service';
+// import { IProduct } from '../interfaces';
+import ProductsService from '../services/products.service';
 
-async function insert(req: Request, res: Response) {
-  const product: IProduct = req.body;
+export default class ProductsController {
+  public productsService = new ProductsService();
   
-  const newProduct = await productsService.insert(product);
+  async insert(req: Request, res: Response) {
+    const product = req.body;
   
-  if (newProduct) {
-    return res.status(201).json(newProduct);
+    const insertProduct = await this.productsService.insert(product);
+  
+    return res.status(201).json(insertProduct);
+  }
+
+  async getAll(_req: Request, res: Response) {
+    const allProducts = await this.productsService.getAll();
+
+    return res.status(200).json(allProducts);
   }
 }
-
-export default {
-  insert,
-};
