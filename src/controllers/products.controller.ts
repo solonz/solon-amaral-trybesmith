@@ -7,7 +7,7 @@ export default class ProductsController {
   
   async insert(req: Request, res: Response) {
     const product = req.body;
-  
+      
     const insertProduct = await this.productsService.insert(product);
   
     return res.status(201).json(insertProduct);
