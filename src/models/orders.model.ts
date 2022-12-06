@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { IOrder } from '../interfaces';
 import mysql from './connection';
 
@@ -15,4 +15,27 @@ export default class OrdersModel {
     );
     return allOrders;
   }
+
+  public async insertOrder(productsIds: number[], userId: number) {
+    const [{ insertId }] = await this.connection.execute<ResultSetHeader>(`
+    INSERT INTO Trybesmith.Orders (userId) VALUE (?)`, [userId]);
+
+    const [{ affectedRows }] = await this.connection.execute<ResultSetHeader>(
+      `
+      UPDATE Trybesmith.Products
+      SET orderId = ?
+      WHERE id IN (${productsIds.map(() => ('?')).join(', ')})
+      `,
+      [insertId, ...productsIds],
+    );
+  
+    return !!affectedRows;
+  }
+
+  // productsIds.forEach(async (ids) => {
+  //   await this.connection.execute<ResultSetHeader>(
+  //     'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ?',
+  //     [insertId, ids],
+  //   );
+  // });
 }
