@@ -9,15 +9,16 @@ export default function validateToken(req: IRequest, res: Response, next: NextFu
     return res.status(401).json({ message: 'Token not found' });
   }
   
-  const [, token] = authHeader.split(' ');
+  //   const [, token] = authHeader.split(' ');
   
   try {
     const user = jwt.verify(
-      token, 
+      authHeader, 
       secret as string,
     );
+    console.log({ user });
   
-    req.body.user = user as IRequest['user'];
+    req.user = user as IRequest['user'];
   
     return next();
   } catch (_err) {

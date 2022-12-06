@@ -6,8 +6,8 @@ export default class UsersService {
   public UsersModel = new UsersModel();
 
   public async insertUser(newUser: IUser): Promise<object> {
-    await this.UsersModel.insertUser(newUser);
-    const token = generateToken(newUser);
+    const user = await this.UsersModel.insertUser(newUser);
+    const token = generateToken(user);
     return { token };
   }
 }

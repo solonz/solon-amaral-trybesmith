@@ -9,13 +9,15 @@ export default class OrdersController {
     const allOrders = await this.ordersService.getAll();
 
     return res.status(200).json(allOrders);
+    // const userId = user?.id;
   }
 
   public async insertOrder(req: IRequest, res: Response) {
-    // const userId = user?.id;
     const { status, result } = await this.ordersService
       .insertOrder(req.body.productsIds, req.user?.id as number);
 
+    console.log(result);
+      
     return res.status(status).json(result);
   }
 }

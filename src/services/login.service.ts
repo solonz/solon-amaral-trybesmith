@@ -7,6 +7,7 @@ export default class LoginService {
 
   public async login(userData: ILogin) {
     const result = await this.loginModel.login(userData);
+    console.log(result);
 
     if (!result.length) { 
       return { 
@@ -16,7 +17,7 @@ export default class LoginService {
         }, 
       }; 
     } 
-    const token = generateToken(userData);
+    const token = generateToken(result[0]);
     return {
       status: 200,
       response: { token },

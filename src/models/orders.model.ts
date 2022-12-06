@@ -17,8 +17,11 @@ export default class OrdersModel {
   }
 
   public async insertOrder(productsIds: number[], userId: number) {
+    console.log(userId);
+    
     const [{ insertId }] = await this.connection.execute<ResultSetHeader>(`
     INSERT INTO Trybesmith.Orders (userId) VALUE (?)`, [userId]);
+    console.log('insert');
 
     const [{ affectedRows }] = await this.connection.execute<ResultSetHeader>(
       `
@@ -28,7 +31,8 @@ export default class OrdersModel {
       `,
       [insertId, ...productsIds],
     );
-  
+    console.log('update');
+
     return !!affectedRows;
   }
 

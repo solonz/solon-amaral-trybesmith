@@ -3,9 +3,12 @@ import { IOrder } from '../interfaces';
 import response from '../middlewares/response';
 import validateProducts from '../middlewares/zod.validation';
 import OrdersModel from '../models/orders.model';
+import ProductsModel from '../models/products.model';
 
 export default class OrdersService {
   public OrdersModel = new OrdersModel();
+
+  public ProductsModel = new ProductsModel();
 
   public async getAll(): Promise<IOrder[]> {
     const allOrders = this.OrdersModel.getAll();
@@ -20,7 +23,8 @@ export default class OrdersService {
       return response(error.status, { message: error.message });
     }
     
-    const allProducts = await this.OrdersModel.getAll();
+    const allProducts = await this.ProductsModel.getAll();
+    console.log({ allProducts, productsIds });
 
     if (!productsIds.every((id) => (allProducts
       .map(({ id: productsId }) => (productsId)).includes(id)))) {
